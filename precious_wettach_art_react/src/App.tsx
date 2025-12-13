@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom"
 import MainLayout from '../app/shared/MainLayout'
 import Home from "../app/pages/Home"
 import About from "../app/pages/About"
+import ProductDetials from "../app/pages/ProductDetials"
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/about" element={<About />} />
+        <Route path="/product" element={<ProductDetials />} />
       </Route>
 
     </Routes>

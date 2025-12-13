@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button"
+import { Link } from "react-router-dom"
 import type { Product } from "Types/product"
 
 
@@ -33,8 +34,22 @@ const Card = ({product}: CardProduct) => {
         <h3 className="p-4 font-bold">{product.name.toUpperCase()}</h3>
         <p className="p-4">Price: ${product.price / 100}</p>
         <div className="flex justify-between pb-2 mt-auto">
-          <Button className="hover:cursor-pointer text-blue-400 text-[1.1rem] font-normal" variant="ghost">Add To Cart</Button>
-          <Button className="hover:cursor-pointer text-blue-400 text-[1.1rem] font-normal" variant="ghost">View</Button>
+
+          <Button 
+          className="
+          hover:cursor-pointer 
+          text-blue-400 
+          text-[1.1rem] 
+          font-normal" 
+          variant="ghost">Add To Cart</Button>
+
+          <Button 
+          className="
+          hover:cursor-pointer 
+          text-blue-400 
+          text-[1.1rem] 
+          font-normal" 
+          variant="ghost"><Link to={`/product/${product.id}`}>View</Link></Button>
         </div>
     </div>
   )
