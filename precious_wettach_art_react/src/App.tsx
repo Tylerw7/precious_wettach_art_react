@@ -1,16 +1,23 @@
-import NavBar from "../app/shared/NavBar"
+
 import Gallery from '../app/pages/Gallery'
+import { Routes, Route } from "react-router-dom"
+import MainLayout from '../app/shared/MainLayout'
+import Home from "../app/pages/Home"
+import About from "../app/pages/About"
 
 
 function App() {
   
 
   return (
-    <>
-      <NavBar />
-      <h1 className="text-[3rem] text-green-500">Hello</h1>
-      <Gallery />
-    </>
+    <Routes>
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/about" element={<About />} />
+      </Route>
+
+    </Routes>
   )
 }
 
