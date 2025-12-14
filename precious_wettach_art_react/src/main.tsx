@@ -4,10 +4,11 @@ import './index.css'
 import App from './App.tsx'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import configureTheStore from '../app/store/store.ts'
+import store from '../app/store/store.ts'
 
 
-const store = configureTheStore();
+
+
 
 
 createRoot(document.getElementById('root')!).render(

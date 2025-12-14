@@ -1,13 +1,13 @@
-import { useSelector, useDispatch} from 'react-redux'
-import { Link } from 'react-router-dom'
-import type{ CounterState } from 'app/features/reducers/counterReducer'
-import { Button } from '@/components/ui/button'
 
+import { Link } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { increment, decrement } from '../features/reducers/counterReducer'
+import { useAppDispatch, useAppSelector } from '../store/store'
 
 
 const Home = () => {
-  const data = useSelector((state: CounterState) => state.data)
-  const dispatch = useDispatch();
+  const {data} = useAppSelector(state => state.counter)
+  const dispatch = useAppDispatch();
 
 
   return (
@@ -16,8 +16,8 @@ const Home = () => {
         <Link to="/gallery" className='text-purple-500'>Gallery</Link>
         <Link to="/about" className='text-purple-500'>About</Link>
         <p>State: {data}</p>
-        <Button onClick={() => dispatch({type: 'increment'})} className='w-[150px]'>ADD</Button>
-        <Button onClick={() => dispatch({type: 'decrement'})} className='w-[150px]'>Minus</Button>
+        <Button onClick={() => dispatch(increment(1))} className='w-[150px]'>ADD</Button>
+        <Button onClick={() => dispatch(decrement(1))} className='w-[150px]'>Minus</Button>
     </div>
   )
 }
