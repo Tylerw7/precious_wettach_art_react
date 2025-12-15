@@ -1,37 +1,24 @@
 import { useParams } from "react-router-dom"
-import { useState, useEffect } from "react";
-import type { Product } from "Types/product";
-import axios from "axios";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
     Field, 
     FieldLabel, 
  } from "@/components/ui/field";
+import { useFetchProductDetialsQuery } from "../features/galleryApi";
 
 
 
 const ProductDetials = () => {
     const {id} = useParams();
-    const [products, setProducts] = useState<Product | null>(null);
     const [quantity, setQuantity] = useState(1)
 
 
+    const {data: products, isLoading} = useFetchProductDetialsQuery(id ? parseInt(id) : 0)
+  
 
-    useEffect(() => {
-        const data = async() => {
-          try {
-            const res = await axios.get(`http://localhost:5001/api/products/${id}`) 
-            setProducts(res.data)
-          } catch (err) {
-            console.log(err)
-          }
-        }
-      
-        data()
-      },[id])
-
-      if (!products) {
+      if (!products || isLoading) {
         return <div className="mt-[150px]">Loading...</div>;
       }
 
