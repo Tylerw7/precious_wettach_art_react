@@ -1,10 +1,19 @@
-
 import { useState, useEffect } from "react";
+import { useAppSelector } from "../store/store";
+
+
+
 
 const NavBar = () => {
     const [showNavbar, setShowNavbar] = useState(true);
   const [showTopBar, setShowTopBar] = useState(true); // for NAP bar
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  //Redux State
+  const {isLoading} = useAppSelector(state => state.ui);
+
+
+
 
   const handleScroll = () => {
     if (typeof window !== "undefined") {
@@ -55,6 +64,26 @@ const NavBar = () => {
           </ul>
         </div>
       </nav>
+
+
+      {/* Loading bar starts here */}
+     { isLoading && (
+        <div className="w-screen h-1 bg-gray-200 overflow-hidden z-50">
+          <div
+            className="
+              absolute h-[3px] w-1/3 bg-black
+              animate-[loading_1.2s_infinite_linear]
+            "
+          />
+
+          <style>{`
+            @keyframes loading {
+              0% { transform: translateX(-100%); }
+              100% { transform: translateX(300%); }
+            }
+          `}</style>
+        </div>
+      )}
     </div>
   )
 }

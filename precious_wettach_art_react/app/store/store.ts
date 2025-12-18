@@ -2,13 +2,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import { counterSlice } from '../features/reducers/counterReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import {galleryApi} from "../features/galleryApi"
-
+import {uiSlice} from "../features/uiSlice"
 
 
 const store = configureStore({
     reducer: {
         [galleryApi.reducerPath]: galleryApi.reducer,
-        counter: counterSlice.reducer
+        counter: counterSlice.reducer,
+        ui: uiSlice.reducer
     },
     middleware: (getDeaultMiddleware) =>
         getDeaultMiddleware().concat(galleryApi.middleware)
