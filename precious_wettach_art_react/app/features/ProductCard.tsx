@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button"
+import { useAddBasketItemMutation } from "../pages/Basket/basketApi"
 import { Link } from "react-router-dom"
 import type { Product } from "Types/product"
 
@@ -17,6 +18,9 @@ type CardProduct = {
 
 // Card Component
 const Card = ({product}: CardProduct) => {
+  const [addBasketItem, {isLoading}] = useAddBasketItemMutation();
+
+
   return (
     <div className="
       w-[300px] 
@@ -41,7 +45,10 @@ const Card = ({product}: CardProduct) => {
           text-blue-400 
           text-[1.1rem] 
           font-normal" 
-          variant="ghost">Add To Cart</Button>
+          variant="ghost"
+          onClick={() => addBasketItem({productId: product.id, quantity: 1})}
+          disabled={isLoading}
+          >Add To Cart</Button>
 
           <Button 
           className="

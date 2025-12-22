@@ -11,7 +11,8 @@ import { toast } from "sonner";
 
 
 const customBaseQuery = fetchBaseQuery({
-    baseUrl: 'http://localhost:5001/api'
+    baseUrl: 'http://localhost:5001/api',
+    credentials: 'include'
 });
 
 
