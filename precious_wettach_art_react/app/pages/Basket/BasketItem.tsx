@@ -2,7 +2,7 @@ import type { Item } from "Types/basket"
 import { FaMinus } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { useRemoveBasketItemMutation } from "./basketApi";
+import { useAddBasketItemMutation, useRemoveBasketItemMutation } from "./basketApi";
 
 
 type Props = {
@@ -13,6 +13,7 @@ type Props = {
 
 const BasketItem = ({ item }: Props) => {
     const [removeBasketItem] = useRemoveBasketItemMutation();
+    const [addBasketItem] = useAddBasketItemMutation();
 
 
 
@@ -53,7 +54,10 @@ const BasketItem = ({ item }: Props) => {
                         {item.quantity}
                     </div>
 
-                    <div className="w-[30px] h-[30px] border border-green-400 rounded-sm flex justify-center items-center hover:cursor-pointer">
+                    <div 
+                        className="w-[30px] h-[30px] border border-green-400 rounded-sm flex justify-center items-center hover:cursor-pointer"
+                        onClick={() => addBasketItem({product: item, quantity: 1})}
+                        >
                         <FaPlus color="green"/>
                     </div>
                 </div>
