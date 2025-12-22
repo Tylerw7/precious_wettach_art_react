@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAppSelector } from "../store/store";
+import { GiShoppingBag } from "react-icons/gi";
+import { Link } from "react-router-dom";
 
 
 
@@ -55,13 +57,16 @@ const NavBar = () => {
           showNavbar ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        <div className="max-w-6xl mx-auto px-4 py-4 h-[80px] flex justify-between items-center">
+        <div className="max-w-6xl mx-auto px-4 py-4 h-[80px] flex justify-evenly items-center">
           <h1 className="text-xl font-bold">Logo</h1>
           <ul className="flex gap-4">
             <li>Home</li>
             <li>About</li>
             <li>Contact</li>
           </ul>
+          <div>
+            <Link to="/basket"><GiShoppingBag size={25}/></Link>
+          </div>  
         </div>
       </nav>
 
