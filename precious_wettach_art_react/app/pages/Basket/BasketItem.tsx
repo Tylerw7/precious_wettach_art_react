@@ -2,6 +2,7 @@ import type { Item } from "Types/basket"
 import { FaMinus } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { useRemoveBasketItemMutation } from "./basketApi";
 
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 
 
 const BasketItem = ({ item }: Props) => {
+    const [removeBasketItem] = useRemoveBasketItemMutation();
 
 
 
@@ -40,7 +42,10 @@ const BasketItem = ({ item }: Props) => {
                     <p>Total: <span className="text-blue-400">${(item.price / 100 * item.quantity)}</span></p>
                 </div>
                 <div className="flex gap-3">
-                    <div className="w-[30px] h-[30px] border border-red-400 rounded-sm flex justify-center items-center">
+                    <div 
+                        className="w-[30px] h-[30px] border border-red-400 rounded-sm flex justify-center items-center hover:cursor-pointer"
+                        onClick={() => removeBasketItem({productId: item.productId, quantity: 1})}
+                        >
                         <FaMinus color="red"/>
                     </div>
 
@@ -48,13 +53,17 @@ const BasketItem = ({ item }: Props) => {
                         {item.quantity}
                     </div>
 
-                    <div className="w-[30px] h-[30px] border border-green-400 rounded-sm flex justify-center items-center">
+                    <div className="w-[30px] h-[30px] border border-green-400 rounded-sm flex justify-center items-center hover:cursor-pointer">
                         <FaPlus color="green"/>
                     </div>
                 </div>
         </div>
         <div className="h-full">
-            <div className="w-[30px] h-[30px] flex justify-center items-center">
+            <div 
+            className="w-[30px] h-[30px] flex justify-center items-center hover:cursor-pointer
+            "
+            onClick={() => removeBasketItem({productId: item.productId, quantity: item.quantity})}
+            >
                 <FaRegTrashCan color="red" size={20}/>
             </div>
         </div>

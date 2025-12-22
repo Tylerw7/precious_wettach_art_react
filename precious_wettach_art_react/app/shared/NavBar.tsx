@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAppSelector } from "../store/store";
 import { GiShoppingBag } from "react-icons/gi";
 import { Link } from "react-router-dom";
+import { useFetchBasketQuery } from "../pages/Basket/basketApi";
 
 
 
@@ -13,8 +14,10 @@ const NavBar = () => {
 
   //Redux State
   const {isLoading} = useAppSelector(state => state.ui);
+  const {data} = useFetchBasketQuery();
 
-
+  // Number of items in our basket
+  const itemCount = data?.items.reduce((sum, item) => sum + item.quantity, 0) || 0;
 
 
   const handleScroll = () => {
@@ -64,8 +67,9 @@ const NavBar = () => {
             <li>About</li>
             <li>Contact</li>
           </ul>
-          <div>
+          <div className="relative">
             <Link to="/basket"><GiShoppingBag size={25}/></Link>
+            <div className="absolute top-4 -right-1 flex justify-center items-center w-[15px] h-[15px] rounded-full bg-red-400 text-[.8rem]">{itemCount}</div>
           </div>  
         </div>
       </nav>

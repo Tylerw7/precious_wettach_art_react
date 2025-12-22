@@ -46,7 +46,7 @@ const Card = ({product}: CardProduct) => {
           text-[1.1rem] 
           font-normal" 
           variant="ghost"
-          onClick={() => addBasketItem({productId: product.id, quantity: 1})}
+          onClick={() => addBasketItem({product, quantity: 1})}
           disabled={isLoading}
           >Add To Cart</Button>
 
