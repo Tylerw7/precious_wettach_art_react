@@ -1,5 +1,6 @@
 import BasketItem from './BasketItem'
 import { useFetchBasketQuery } from './basketApi'
+import OrderSummary from '../../shared/OrderSummary'
 
 
 
@@ -11,7 +12,7 @@ const BasketPage = () => {
 
     
   return (
-    <div className='mt-[120px] p-4'>
+    <div className='mt-[120px] p-4 flex gap-5 w-full flex-col md:flex-row'>
 
       <div>
       {data.items.map(item => (
@@ -19,10 +20,8 @@ const BasketPage = () => {
       ))}
       </div>
 
-      <div>
+      <OrderSummary />
 
-      </div>
-      
     </div>
   )
 }

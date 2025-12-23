@@ -1,0 +1,49 @@
+import { Button } from '@/components/ui/button';
+import {currencyFormat} from '../../lib/util'
+import { Input } from '@/components/ui/input';
+
+
+
+const OrderSummary = () => {
+    const subtotal = 0;
+    const deliveryFee = 0;
+
+
+  return (
+    <div className="w-full flex flex-col gap-4">
+
+        <div className=" w-full h-full rounded-sm shadow-lg p-4 flex flex-col">
+            <h3 className="font-bold text-[1.7rem]">Order Summary</h3>
+            <p className="italic text-muted-foreground mb-[25px]">Orders over $100 qualify for free delivery</p>
+            
+            <div className="flex justify-between w-full mb-[5px]">
+                <p>Subtotal</p>
+                <p>{currencyFormat(subtotal)}</p>
+            </div>
+
+            <div className="flex justify-between w-full mb-[5px]">
+                <p>Discount</p>
+                <p>-0.00</p>
+            </div>
+            
+            <div className="flex justify-between w-full mb-[30px]">
+                <p>Delivery Fee</p>
+                <p>{currencyFormat(deliveryFee)}</p>
+            </div>
+
+            <Button className='mb-[15px] bg-blue-500 hover:cursor-pointer' >CECKOUT</Button>
+            <Button variant="ghost" className='hover:cursor-pointer text-blue-500'>CONTINUE SHOPPING</Button>
+
+        </div>
+
+        <div className="w-full rounded-sm shadow-lg p-4 flex flex-col">
+            <h3 className='mb-[15px]'>Do you have a voucher code?</h3>
+            <Input type='text' id="voucher" placeholder='voucher code' className='h-[40px] mb-[15px]'/>
+            <Button className=' bg-blue-500 hover:cursor-pointer'>APPLY CODE</Button>
+        </div>
+
+    </div>
+  )
+}
+
+export default OrderSummary

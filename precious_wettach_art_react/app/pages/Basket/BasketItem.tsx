@@ -3,6 +3,7 @@ import { FaMinus } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { useAddBasketItemMutation, useRemoveBasketItemMutation } from "./basketApi";
+import {currencyFormat} from '../../../lib/util'
 
 
 type Props = {
@@ -27,6 +28,8 @@ const BasketItem = ({ item }: Props) => {
         items-center
         shadow-lg
         gap-4
+        w-full
+        md:w-[60vw]
         ">
         <div className="w-[110px] h-[110px] rounded-sm">
             <img 
@@ -39,8 +42,8 @@ const BasketItem = ({ item }: Props) => {
         <div className="flex flex-col gap-2 w-full">
             <h3 className="font-bold text-[1.2rem]">{item.name}</h3>
                 <div className="flex gap-4">
-                    <p>${(item.price / 100).toFixed(2)} x {item.quantity}</p>
-                    <p>Total: <span className="text-blue-400">${(item.price / 100 * item.quantity)}</span></p>
+                    <p>{currencyFormat(item.price)} x {item.quantity}</p>
+                    <p>Total: <span className="text-blue-400">{currencyFormat(item.price * item.quantity)}</span></p>
                 </div>
                 <div className="flex gap-3">
                     <div 
