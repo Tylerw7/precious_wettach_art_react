@@ -1,12 +1,15 @@
 import { Button } from '@/components/ui/button';
 import {currencyFormat} from '../../lib/util'
 import { Input } from '@/components/ui/input';
+import { useFetchBasketQuery } from '../pages/Basket/basketApi';
+import type { Item } from 'Types/basket';
 
 
 
 const OrderSummary = () => {
-    const subtotal = 0;
-    const deliveryFee = 0;
+    const {data: basket} = useFetchBasketQuery();
+    const subtotal = basket?.items.reduce((sum: number, item: Item) => sum + item.quantity * item.price, 0) ?? 0;
+    const deliveryFee = subtotal > 10000 ? 0 : 500;
 
 
   return (
@@ -38,7 +41,7 @@ const OrderSummary = () => {
 
         <div className="w-full rounded-sm shadow-lg p-4 flex flex-col">
             <h3 className='mb-[15px]'>Do you have a voucher code?</h3>
-            <Input type='text' id="voucher" placeholder='voucher code' className='h-[40px] mb-[15px]'/>
+            <Input type='text' id="voucher" placeholder='voucher code' className='h-10 mb-[15px]'/>
             <Button className=' bg-blue-500 hover:cursor-pointer'>APPLY CODE</Button>
         </div>
 

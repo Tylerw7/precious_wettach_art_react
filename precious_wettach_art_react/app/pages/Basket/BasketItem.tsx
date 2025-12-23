@@ -30,6 +30,7 @@ const BasketItem = ({ item }: Props) => {
         gap-4
         w-full
         md:w-[60vw]
+        mb-[20px]
         ">
         <div className="w-[110px] h-[110px] rounded-sm">
             <img 

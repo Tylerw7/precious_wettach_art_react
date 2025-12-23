@@ -12,7 +12,7 @@ const BasketPage = () => {
 
     
   return (
-    <div className='mt-[120px] p-4 flex gap-5 w-full flex-col md:flex-row'>
+    <div className='mt-[140px] p-4 flex gap-5 w-full flex-col md:flex-row'>
 
       <div>
       {data.items.map(item => (
