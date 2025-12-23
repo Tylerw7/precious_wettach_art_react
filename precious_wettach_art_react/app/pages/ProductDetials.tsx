@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -7,20 +7,54 @@ import {
     FieldLabel, 
  } from "@/components/ui/field";
 import { useFetchProductDetialsQuery } from "../features/galleryApi";
+import { useAddBasketItemMutation, useFetchBasketQuery, useRemoveBasketItemMutation } from "./Basket/basketApi";
 
 
 
 const ProductDetials = () => {
     const {id} = useParams();
-    const [quantity, setQuantity] = useState(1)
+    const [removeBasketItem] = useRemoveBasketItemMutation();
+    const [addBasketItem] = useAddBasketItemMutation();
+    const {data: basket} = useFetchBasketQuery();
+    const item = basket?.items.find(x => x.productId === +id!);
+    const [quantity, setQuantity] = useState(0);
+
+   
+    useEffect(() => {
+        if (item) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setQuantity(item.quantity);
+        }
+      }, [item]);
+      
+      
+      
 
 
-    const {data: products, isLoading} = useFetchProductDetialsQuery(id ? parseInt(id) : 0)
+
+    const {data: product, isLoading} = useFetchProductDetialsQuery(id ? parseInt(id) : 0)
   
 
-      if (!products || isLoading) {
+      if (!product || isLoading) {
         return <div className="mt-[150px]">Loading...</div>;
       }
+
+
+    const handleUpdateBasket = () => {
+        const updatedQuantity = item ? Math.abs(quantity - item.quantity) : quantity;
+        if (!item || quantity > item.quantity) {
+            addBasketItem({product, quantity: updatedQuantity})
+        } else {
+            removeBasketItem({productId: product.id, quantity: updatedQuantity})
+        }
+    }
+        
+
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) =>  {
+        const value = +event.currentTarget.value;
+
+        if (value >= 0) setQuantity(value);
+    }
 
 
 
@@ -40,8 +74,8 @@ const ProductDetials = () => {
         {/* Image Container */}
         <div className="w-full md:w-[50%] p-4 flex justify-center items-center">
             <img
-                src={products?.pictureUrl} 
-                alt={products?.name}
+                src={product?.pictureUrl} 
+                alt={product?.name}
                 className="w-[80%]"
             />
         </div>
@@ -49,9 +83,9 @@ const ProductDetials = () => {
 
         {/* Description Container */}
         <div className="w-full h-full md:w-[50%] p-4">
-            <h1 className="font-bold text-[1.8rem]">{products?.name.toUpperCase()}</h1>
-            <p className="mt-5">Price: <span className="font-bold text-[1.5rem] italic">${(products.price / 100).toFixed(2)}</span></p>
-            <p className="mt-5">Available: <span className="font-bold text-[1.5rem] italic">{products.quantityInStock ?  "Yes" : "No"}</span></p>
+            <h1 className="font-bold text-[1.8rem]">{product?.name.toUpperCase()}</h1>
+            <p className="mt-5">Price: <span className="font-bold text-[1.5rem] italic">${(product.price / 100).toFixed(2)}</span></p>
+            <p className="mt-5">Available: <span className="font-bold text-[1.5rem] italic">{product.quantityInStock ?  "Yes" : "No"}</span></p>
             
             <div className="flex items-end mt-[100px] gap-[10%]">
             <div>
@@ -63,7 +97,7 @@ const ProductDetials = () => {
                     type="button"
                     variant="outline"
                     size="icon"
-                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                    onClick={() => setQuantity((q) => Math.max(0, q - 1))}
                     aria-label="Decrease quantity"
                     >
                     −
@@ -72,8 +106,8 @@ const ProductDetials = () => {
                     <Input
                     id="quantity"
                     type="number"
-                    min={1}
                     value={quantity}
+                    onChange={handleInputChange}
                     readOnly
                     className="w-16 text-center"
                     />
@@ -82,8 +116,8 @@ const ProductDetials = () => {
                     type="button"
                     variant="outline"
                     size="icon"
-                    onClick={() => setQuantity((q) => q + 1)}
                     aria-label="Increase quantity"
+                    onClick={() => setQuantity((q) => Math.max(1, q + 1))}
                     >
                     +
                     </Button>
@@ -91,8 +125,13 @@ const ProductDetials = () => {
             </Field>
             </div>
 
+
+
             <div>
-            <Button className="w-[200px] h-[50px] text-[1.2rem] hover:cursor-pointer">Add To Cart</Button>
+            <Button className="w-[200px] h-[50px] text-[1.2rem] hover:cursor-pointer"
+                disabled={quantity === item?.quantity || !item && quantity === 0}
+                onClick={handleUpdateBasket}
+                >{item ? 'Update Quantity' : 'Add To Basket'}</Button>
             </div>
 
             </div>
