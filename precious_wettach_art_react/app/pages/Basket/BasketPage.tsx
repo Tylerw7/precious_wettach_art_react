@@ -8,7 +8,7 @@ const BasketPage = () => {
     const {data, isLoading} = useFetchBasketQuery();
 
     if (isLoading) return <div className='mt-[120px]'>Loading Basket!...</div>
-    if (!data) return <div className='mt-[120px]'>Your basket is empty</div>
+    if (!data || data.items.length === 0) return <div className='mt-[120px] p-4 font-bold text-[2rem]'>Your basket is empty</div>
 
     
   return (
