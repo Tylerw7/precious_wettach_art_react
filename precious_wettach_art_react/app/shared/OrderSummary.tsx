@@ -3,6 +3,7 @@ import {currencyFormat} from '../../lib/util'
 import { Input } from '@/components/ui/input';
 import { useFetchBasketQuery } from '../pages/Basket/basketApi';
 import type { Item } from 'Types/basket';
+import { Link } from 'react-router-dom';
 
 
 
@@ -34,8 +35,10 @@ const OrderSummary = () => {
                 <p>{currencyFormat(deliveryFee)}</p>
             </div>
 
-            <Button className='mb-[15px] bg-blue-500 hover:cursor-pointer' >CECKOUT</Button>
-            <Button variant="ghost" className='hover:cursor-pointer text-blue-500'>CONTINUE SHOPPING</Button>
+            <Link to="/checkout" className='w-full'><Button className='w-full mb-[15px] bg-blue-500 hover:cursor-pointer' 
+                >CECKOUT</Button></Link>
+
+            <Link to="/gallery" className='w-full'><Button variant="ghost" className='w-full hover:cursor-pointer text-blue-500'>CONTINUE SHOPPING</Button></Link>
 
         </div>
 

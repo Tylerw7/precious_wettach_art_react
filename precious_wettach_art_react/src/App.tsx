@@ -6,6 +6,7 @@ import Home from "../app/pages/Home"
 import About from "../app/pages/about/About"
 import ProductDetials from "../app/pages/ProductDetials"
 import BasketPage from "../app/pages/Basket/BasketPage"
+import CheckoutPage from '../app/pages/Checkout/CheckoutPage'
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/product/:id" element={<ProductDetials />} />
         <Route path="/basket" element={<BasketPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
       </Route>
 
     </Routes>
