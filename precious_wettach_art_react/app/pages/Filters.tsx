@@ -13,7 +13,7 @@ const sortOptions = [
 
 const Filters = () => {
     const {data} = useFetchFiltersQuery();
-    console.log(data);
+    
 
 
 
@@ -40,8 +40,8 @@ const Filters = () => {
         <div className="w-full bg-yellow-100 p-3 rounded-sm mb-4 shadow-md">
         <h3 className="font-bold mb-2">Brand</h3>
             <form>
-                {data && data.brands.map(item => (
-                    <Label className="mb-2">
+                {data && data.brands.map((item, i )=> (
+                    <Label className="mb-2" key={i}>
                         <input type="checkbox" value={item}/>
                         {item}
                     </Label>
@@ -52,8 +52,8 @@ const Filters = () => {
         <div className="w-full bg-yellow-100 p-3 rounded-sm mb-4 shadow-md">
             <h3 className="font-bold mb-2">Types</h3>
             <form>
-                {data && data.types.map(item => (
-                    <Label className="mb-2">
+                {data && data.types.map((item, i) => (
+                    <Label className="mb-2" key={i}>
                         <input type="checkbox" value={item}/>
                         {item}
                     </Label>

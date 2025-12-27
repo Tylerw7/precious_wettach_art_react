@@ -5,6 +5,7 @@ import {galleryApi} from "../features/galleryApi"
 import {uiSlice} from "../features/uiSlice"
 import {errorApi} from "../pages/about/errorApi"
 import {basketApi} from '../pages/Basket/basketApi'
+import {gallerySlice} from '../features/gallerySlice'
 
 
 const store = configureStore({
@@ -13,7 +14,8 @@ const store = configureStore({
         [errorApi.reducerPath]: errorApi.reducer,
         [basketApi.reducerPath]: basketApi.reducer,
         counter: counterSlice.reducer,
-        ui: uiSlice.reducer
+        ui: uiSlice.reducer,
+        gallery: gallerySlice.reducer
     },
     middleware: (getDeaultMiddleware) =>
         getDeaultMiddleware().concat(galleryApi.middleware, errorApi.middleware, basketApi.middleware)

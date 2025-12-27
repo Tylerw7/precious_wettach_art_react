@@ -2,11 +2,13 @@
 import Filters from './Filters'
 import ProductCard from '../features/ProductCard'
 import { useFetchProductsQuery } from '../features/galleryApi'
+import { useAppSelector } from '../store/store'
 
 
 
 const Gallery = () => {
-    const {data, isLoading} = useFetchProductsQuery();
+    const productParams = useAppSelector(state => state.gallery)
+    const {data, isLoading} = useFetchProductsQuery(productParams);
 
 
     if (isLoading || !data) return <div>Loading...</div>
