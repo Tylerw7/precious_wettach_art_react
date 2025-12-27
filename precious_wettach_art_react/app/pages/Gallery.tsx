@@ -15,7 +15,7 @@ const Gallery = () => {
 
 
   return (
-    <div className='mt-[300px] flex flex-col lg:flex-row'>
+    <div className='mt-[150px] flex flex-col lg:flex-row'>
       <div className='w-full lg:w-[20vw]'>
         <Filters />
       </div>
