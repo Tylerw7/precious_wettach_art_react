@@ -12,9 +12,12 @@ export const galleryApi = createApi({
         }),
         fetchProductDetials: builder.query<Product, number>({
             query: (productId) => `products/${productId}`
+        }),
+        fetchFilters: builder.query<{brands: string[], types: string[]}, void>({
+            query: () => 'products/filters'
         })
     })
 })
 
 
-export const {useFetchProductDetialsQuery, useFetchProductsQuery} = galleryApi;
+export const {useFetchProductDetialsQuery, useFetchProductsQuery, useFetchFiltersQuery} = galleryApi;

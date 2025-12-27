@@ -73,7 +73,6 @@ const ProductCard = ({products}: Prop) => {
 
   return (
     <>
-    <div>ProductList</div>
     <div className="flex flex-wrap gap-4 justify-evenly">
     {products.map((item,i) => (
       <Card product={item} key={i}/>

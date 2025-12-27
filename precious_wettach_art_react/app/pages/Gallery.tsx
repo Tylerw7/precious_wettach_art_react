@@ -1,5 +1,5 @@
 
-import {Button }from '../../src/components/ui/button'
+import Filters from './Filters'
 import ProductCard from '../features/ProductCard'
 import { useFetchProductsQuery } from '../features/galleryApi'
 
@@ -15,9 +15,14 @@ const Gallery = () => {
 
 
   return (
-    <div className='mt-[300px]'>
+    <div className='mt-[300px] flex flex-col lg:flex-row'>
+      <div className='w-full lg:w-[20vw]'>
+        <Filters />
+      </div>
+      <div className='w-full lg:w-[80vw]'>
         <ProductCard products={data} />
-        <Button>Click Me</Button>
+      </div>
+        
     </div>
   )
 }
