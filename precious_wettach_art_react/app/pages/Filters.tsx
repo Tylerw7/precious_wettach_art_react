@@ -1,7 +1,7 @@
 import React from "react";
 import {useFetchFiltersQuery} from "../features/galleryApi"
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import Search from '../features/Search'
 
 
 
@@ -19,12 +19,9 @@ const Filters = () => {
 
   return (
     <div className="p-4 w-full flex flex-col">
-        
-        <div className="w-full bg-yellow-100 p-3 rounded-sm mb-4 shadow-md">
-        <h3 className="font-bold mb-2">Search Product</h3>
-            <Input type="text" placeholder="Search Product"/>
-        </div>
 
+        <Search />
+        
         <div className="w-full bg-yellow-100 p-3 rounded-sm mb-4 shadow-md">
         <h3 className="font-bold mb-2">Sort</h3>
             <form>
