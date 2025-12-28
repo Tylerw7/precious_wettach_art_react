@@ -1,7 +1,10 @@
-import React from "react";
+
 import {useFetchFiltersQuery} from "../features/galleryApi"
 import { Label } from "@/components/ui/label";
 import Search from '../features/Search'
+import RadioButtonGroup from '../features/RadioButtonGroup'
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { setOrderBy } from "../features/gallerySlice";
 
 
 
@@ -13,6 +16,8 @@ const sortOptions = [
 
 const Filters = () => {
     const {data} = useFetchFiltersQuery();
+    const {orderBy} = useAppSelector(state => state.gallery);
+    const dispatch = useAppDispatch();
     
 
 
@@ -24,14 +29,11 @@ const Filters = () => {
         
         <div className="w-full bg-yellow-100 p-3 rounded-sm mb-4 shadow-md">
         <h3 className="font-bold mb-2">Sort</h3>
-            <form>
-                {sortOptions.map(({value, label}) => (
-                    <Label key={label} className="mb-2">
-                        <input type="radio" className="" value={value}/> 
-                        {label}
-                    </Label>
-                ))}
-            </form>
+            <RadioButtonGroup 
+                selectedValue={orderBy}
+                options={sortOptions}
+                onChange={e => dispatch(setOrderBy(e))}
+                />
         </div>
 
         <div className="w-full bg-yellow-100 p-3 rounded-sm mb-4 shadow-md">
