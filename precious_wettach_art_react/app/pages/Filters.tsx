@@ -1,10 +1,19 @@
 
-import {useFetchFiltersQuery} from "../features/galleryApi"
 import Search from '../features/Search'
 import RadioButtonGroup from '../features/RadioButtonGroup'
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { setBrands, setOrderBy, setTypes } from "../features/gallerySlice";
+import { resetParams, setBrands, setOrderBy, setTypes } from "../features/gallerySlice";
 import CheckBoxButtons from '../features/CheckBoxButtons'
+import { Button } from "@/components/ui/button";
+
+
+
+type Props = {
+    filtersData: {
+        brands: string[];
+        types: string[];
+    }
+}
 
 
 
@@ -14,14 +23,11 @@ const sortOptions = [
     {value: 'price', label: 'Price: Low to High'},
 ]
 
-const Filters = () => {
-    const {data} = useFetchFiltersQuery();
+const Filters = ({filtersData: data}: Props) => {
+    
     const {orderBy, types, brands} = useAppSelector(state => state.gallery);
     const dispatch = useAppDispatch();
 
-
-    // Check data
-    if (!data?.brands || !data.types) return <div>Loading...</div>
     
 
 
@@ -56,6 +62,13 @@ const Filters = () => {
                 items={data?.types}
                 onChange={(items: string[]) => dispatch(setTypes(items))}
             />
+        </div>
+
+        <div className="w-full bg-yellow-100 p-3 rounded-sm mb-4 shadow-md flex justify-center items-center">
+            <Button
+                onClick={() => dispatch(resetParams())}
+                className="w-[150px]"
+            >Reset Filters</Button>
         </div>
 
     </div>
