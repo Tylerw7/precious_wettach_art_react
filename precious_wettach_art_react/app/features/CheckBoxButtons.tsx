@@ -39,7 +39,7 @@ const CheckBoxButtons = ({items, checked, onChange}: Props) => {
             type="checkbox" 
             value={item}
             checked={checkedItems.includes(item)}
-            onClick={() => handleToggle(item)}
+            onChange={() => handleToggle(item)}
             />
         {item}
         </Label>

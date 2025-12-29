@@ -18,7 +18,7 @@ const RadioButtonGroup = ({options, onChange, selectedValue}: Props) => {
     <form>
         <RadioGroup onValueChange={onChange} value={selectedValue}>
         {options.map(({value, label}) => (
-         <div className='flex gap-2'>
+         <div className='flex gap-2' key={`radio-${label}`}>
          <RadioGroupItem  className="" value={value}/> 
          <Label key={label} className="mb-2">{label}</Label>
          </div>

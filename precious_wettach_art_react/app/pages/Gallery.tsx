@@ -2,21 +2,16 @@
 import Filters from './Filters'
 import ProductCard from '../features/ProductCard'
 import { useFetchProductsQuery } from '../features/galleryApi'
-import { useAppSelector } from '../store/store'
-import { 
-  Pagination, 
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious, } from '@/components/ui/pagination'
+import { useAppDispatch, useAppSelector } from '../store/store'
+import AppPagination from '../features/AppPagination'
+import { setPageNumber } from '../features/gallerySlice'
 
 
 
 const Gallery = () => {
     const productParams = useAppSelector(state => state.gallery)
     const {data, isLoading} = useFetchProductsQuery(productParams);
+    const dispatch = useAppDispatch();
 
 
     if (isLoading || !data) return <div>Loading...</div>
@@ -30,34 +25,20 @@ const Gallery = () => {
         <Filters />
       </div>
       <div className='w-full lg:w-[80vw]'>
+        {data.items && data.items.length > 0 ? (
+          <>
         <ProductCard products={data.items} />
 
-        <div className='mt-[50px] mb-[150px]'>
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href="#" />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#" >
-                2
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-        </div>
+        <AppPagination 
+          metadata={data.pagination}
+          onPageChange={(page: number) => dispatch(setPageNumber(page))}
+        />
+        </>
+
+      ) : (
+        <h3 className='mt-[50px] font-bold text-[1.2rem] p-4'>There are no resulst for this filter</h3>
+      )}
+        
       </div>
         
     </div>
