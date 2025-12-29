@@ -3,19 +3,24 @@ import type {Product} from '../../Types/product'
 import {baseQueryWithErrorHandling} from "../api/baseApi"
 import type { ProductParams } from "Types/productParams";
 import {filterEmptyValues} from '../../lib/util'
+import type {Pagination} from '../../Types/pagination'
 
 
 export const galleryApi = createApi({
     reducerPath: 'galleryApi',
     baseQuery: baseQueryWithErrorHandling,
     endpoints: (builder) => ({
-        fetchProducts: builder.query<Product[], ProductParams>({
+        fetchProducts: builder.query<{items: Product[], pagination: Pagination}, ProductParams>({
             query: (productParams) => {
                 return {
                     url: 'products',
                     params: filterEmptyValues(productParams)
-                }
-                
+                }  
+            },
+            transformResponse: (items: Product[], meta) => {
+                const paginationHeader = meta?.response?.headers.get('Pagination');
+                const pagination = paginationHeader ? JSON.parse(paginationHeader) : null;
+                return {items, pagination};
             }
         }),
         fetchProductDetials: builder.query<Product, number>({
