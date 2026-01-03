@@ -6,6 +6,7 @@ import {uiSlice} from "../features/uiSlice"
 import {errorApi} from "../pages/about/errorApi"
 import {basketApi} from '../pages/Basket/basketApi'
 import {gallerySlice} from '../features/gallerySlice'
+import {accountApi} from '../features/account/accountApi'
 
 
 const store = configureStore({
@@ -13,12 +14,18 @@ const store = configureStore({
         [galleryApi.reducerPath]: galleryApi.reducer,
         [errorApi.reducerPath]: errorApi.reducer,
         [basketApi.reducerPath]: basketApi.reducer,
+        [accountApi.reducerPath]: accountApi.reducer,
         counter: counterSlice.reducer,
         ui: uiSlice.reducer,
         gallery: gallerySlice.reducer
     },
     middleware: (getDeaultMiddleware) =>
-        getDeaultMiddleware().concat(galleryApi.middleware, errorApi.middleware, basketApi.middleware)
+        getDeaultMiddleware().concat(
+            galleryApi.middleware, 
+            errorApi.middleware, 
+            basketApi.middleware,
+            accountApi.middleware
+        )
 })
 
 export type RootState = ReturnType<typeof store.getState>
