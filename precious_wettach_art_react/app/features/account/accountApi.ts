@@ -1,13 +1,14 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import {baseQueryWithErrorHandling} from '../../api/baseApi'
 import type {User} from '../../../Types/user'
+import type { LoginSchema } from '../../../lib/schemas/loginSchema'
 
 
 export const accountApi = createApi({
     reducerPath: 'accountApi',
     baseQuery: baseQueryWithErrorHandling,
     endpoints: (builder) => ({
-        login: builder.mutation<void, object>({
+        login: builder.mutation<void, LoginSchema>({
             query: (creds) => {
                 return {
                     url: 'login?useCookies=true',
@@ -39,4 +40,4 @@ export const accountApi = createApi({
 
 
 
-export const {useLoginMutation, useRegisterMutation, useLogoutMutation} = accountApi;
+export const {useLoginMutation, useRegisterMutation, useLogoutMutation, useUserInfoQuery} = accountApi;

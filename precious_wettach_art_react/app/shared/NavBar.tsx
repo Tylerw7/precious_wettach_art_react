@@ -3,12 +3,16 @@ import { useAppSelector } from "../store/store";
 import { GiShoppingBag } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { useFetchBasketQuery } from "../pages/Basket/basketApi";
+import React from "react";
+import { UserMenu } from "./UserMenu";
+
 
 
 
 
 const NavBar = () => {
-    const [showNavbar, setShowNavbar] = useState(true);
+  const user = {email: 'test@test.com', roles: []};
+  const [showNavbar, setShowNavbar] = useState(true);
   const [showTopBar, setShowTopBar] = useState(true); // for NAP bar
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -60,17 +64,31 @@ const NavBar = () => {
           showNavbar ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        <div className="max-w-6xl mx-auto px-4 py-4 h-[80px] flex justify-evenly items-center">
+        <div className="max-w-6xl mx-auto px-4 py-4 h-[80px] flex justify-between items-center">
           <h1 className="text-xl font-bold">Logo</h1>
-          <ul className="flex gap-4">
+          <ul className="flex gap-4 text-[1.1rem]">
             <li>Home</li>
             <li>About</li>
             <li>Contact</li>
           </ul>
-          <div className="relative">
-            <Link to="/basket"><GiShoppingBag size={25}/></Link>
-            <div className="absolute top-4 -right-1 flex justify-center items-center w-[15px] h-[15px] rounded-full bg-red-400 text-[.8rem]">{itemCount}</div>
-          </div>  
+          <div className="flex gap-10">
+            <div className="relative">
+              <Link to="/basket"><GiShoppingBag size={25}/></Link>
+              <div className="absolute top-4 -right-1 flex justify-center items-center w-[15px] h-[15px] rounded-full bg-red-400 text-[.8rem]">{itemCount}</div>
+            </div>  
+
+            <div className="flex gap-4 font-bold text-[1.1rem]">
+              {user ? (
+                  <UserMenu user={user}/>
+              ) : (
+                <>
+                <h2><Link to="/login">LOGIN</Link></h2>
+                <h2>REGISTER</h2>
+                </>
+              )}
+            </div>
+          </div>
+
         </div>
       </nav>
 
