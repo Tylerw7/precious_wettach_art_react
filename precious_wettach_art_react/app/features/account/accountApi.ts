@@ -4,9 +4,11 @@ import type {User} from '../../../Types/user'
 import type { LoginSchema } from '../../../lib/schemas/loginSchema'
 
 
+
 export const accountApi = createApi({
     reducerPath: 'accountApi',
     baseQuery: baseQueryWithErrorHandling,
+    tagTypes: ['UserInfo'],
     endpoints: (builder) => ({
         login: builder.mutation<void, LoginSchema>({
             query: (creds) => {
@@ -14,6 +16,14 @@ export const accountApi = createApi({
                     url: 'login?useCookies=true',
                     method: 'POST',
                     body: creds
+                }
+            },
+            async onQueryStarted(_, {dispatch, queryFulfilled}) {
+                try {
+                    await queryFulfilled;
+                    dispatch(accountApi.util.invalidateTags(['UserInfo']));
+                } catch (error) {
+                    console.log(error);
                 }
             }
         }),
@@ -27,13 +37,18 @@ export const accountApi = createApi({
             }
         }),
         userInfo: builder.query<User, void>({
-            query: () => 'account/user-info'
+            query: () => 'account/user-info',
+            providesTags: ['UserInfo']
         }),
         logout: builder.mutation({
             query: () => ({
                 url: 'account/logout',
                 method: 'POST'
-            })
+            }),
+            async onQueryStarted(_, {dispatch, queryFulfilled}) {
+                await queryFulfilled;
+                dispatch(accountApi.util.invalidateTags(['UserInfo']));
+            }
         })
     })
 })

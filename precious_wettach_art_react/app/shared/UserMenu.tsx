@@ -8,6 +8,7 @@ import {
 } from "../../src/components/ui/dropdown-menu"
 import type { User } from "../../Types/user"
 import { useLogoutMutation } from "../features/account/accountApi";
+import { useNavigate } from "react-router-dom";
 
 
 type Props = {
@@ -19,6 +20,11 @@ type Props = {
 
 export function UserMenu({user}: Props) {
     const [logout] = useLogoutMutation();
+    const navigate = useNavigate();
+
+    const redirect = () => {
+        navigate("/");
+    }
 
 
 
@@ -44,7 +50,10 @@ export function UserMenu({user}: Props) {
         <DropdownMenuItem>Support</DropdownMenuItem>
         <DropdownMenuItem 
             className="text-red-600"
-            onClick={logout}
+            onClick={(e) => {
+                logout(e);
+                redirect()
+            }}
             >
           Log out
         </DropdownMenuItem>

@@ -7,6 +7,7 @@ import {loginSchema, type LoginSchema} from '../../../lib/schemas/loginSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLoginMutation } from "../../features/account/accountApi";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -21,8 +22,11 @@ const Login = () => {
         resolver: zodResolver(loginSchema)
     });
 
+    const navigate = useNavigate();
+
     const onSubmit = async (data: LoginSchema) => {
         await login(data);
+        navigate('/gallery')
     }
 
 

@@ -5,13 +5,14 @@ import { Link } from "react-router-dom";
 import { useFetchBasketQuery } from "../pages/Basket/basketApi";
 import React from "react";
 import { UserMenu } from "./UserMenu";
+import { useUserInfoQuery } from "../features/account/accountApi";
 
 
 
 
 
 const NavBar = () => {
-  const user = {email: 'test@test.com', roles: []};
+  const {data: user} = useUserInfoQuery();
   const [showNavbar, setShowNavbar] = useState(true);
   const [showTopBar, setShowTopBar] = useState(true); // for NAP bar
   const [lastScrollY, setLastScrollY] = useState(0);
