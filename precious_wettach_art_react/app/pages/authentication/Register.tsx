@@ -1,32 +1,47 @@
-import { IoIosLock } from "react-icons/io";
-import {Label} from '../../../src/components/ui/label'
-import { Input } from "../../../src/components/ui/input";
-import { Button } from "../../../src/components/ui/button";
-import {useForm} from 'react-hook-form'
-import {loginSchema, type LoginSchema} from '../../../lib/schemas/loginSchema'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useLoginMutation } from "../../features/account/accountApi";
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from 'react'
+import { useRegisterMutation } from '../../features/account/accountApi'
+import { useForm } from 'react-hook-form';
+import {registerSchema, type RegisterSchema} from '../../../lib/schemas/registerSchema'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '../../../src/components/ui/button';
+import { IoIosLock } from 'react-icons/io';
+import { Label } from '../../../src/components/ui/label';
+import { Input } from '../../../src/components/ui/input';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 
-
-
-const Login = () => {
-
-    const [login, {isLoading}] = useLoginMutation();
-
-    const {register, handleSubmit, formState: {errors}} = useForm<LoginSchema>({
-        mode: 'onTouched',
-        resolver: zodResolver(loginSchema)
-    });
-
+const Register = () => {
     const navigate = useNavigate();
+    const [registerUser] = useRegisterMutation();
+    const {register, handleSubmit, setError,formState: {errors, isValid, isLoading}} = useForm<RegisterSchema>({
+        mode: 'onTouched',
+        resolver: zodResolver(registerSchema)
+    })
 
-    const onSubmit = async (data: LoginSchema) => {
-        await login(data);
-        navigate('/gallery')
+    const onSubmit = async (data: RegisterSchema) => {
+        try {
+            await registerUser(data).unwrap();
+            //navigate('/login')
+        } catch (error: any) {
+            const errors = error?.data?.errors;
+          
+            if (errors?.DuplicateEmail?.length) {
+              setError('email', {
+                type: 'server',
+                message: errors.DuplicateEmail[0],
+              });
+            }
+          
+            if (errors?.DuplicateUserName?.length) {
+              setError('email', {
+                type: 'server',
+                message: errors.DuplicateUserName[0],
+              });
+            }
+          }
+        
+    
     }
 
 
@@ -37,7 +52,7 @@ const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="w-[90vw] sm:w-[500px] bg-[#cfc2ac] flex flex-col justify-center items-center p-4 gap-4 rounded-md">
             
             <IoIosLock size={52}/>
-            <h3 className="font-bold text-[2rem]">Sign In</h3>
+            <h3 className="font-bold text-[2rem]">Register</h3>
                 <div className="w-[90%] space-y-1">
                     <Label>Email</Label>
                     <Input
@@ -73,11 +88,11 @@ const Login = () => {
                     )}
                 </div>
 
-                <Button disabled={isLoading} className="w-[90%]" type="submit">SIGN IN</Button>
+                <Button disabled={isLoading || !isValid} className="w-[90%]" type="submit">REGISTER</Button>
 
                 <div className="flex gap-4">
-                    <h3>Don't have an account?</h3>
-                    <Link to='/register' className="text-blue-400">Register</Link>
+                    <h3>Have an account?</h3>
+                    <Link to='/login' className="text-blue-400">Sign In</Link>
                 </div>
             
         </form>
@@ -86,4 +101,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Register

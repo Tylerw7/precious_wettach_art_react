@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import {baseQueryWithErrorHandling} from '../../api/baseApi'
 import type {User} from '../../../Types/user'
 import type { LoginSchema } from '../../../lib/schemas/loginSchema'
+import { toast } from 'sonner'
 
 
 
@@ -33,6 +34,15 @@ export const accountApi = createApi({
                     url: 'account/register',
                     method: 'POST',
                     body: creds
+                }
+            },
+            async onQueryStarted(_, {queryFulfilled}) {
+                try {
+                    await queryFulfilled;
+                    toast.success('Registration successfull - you can now sign in!');
+                } catch (error) {
+                    console.log(error);
+                    throw error;
                 }
             }
         }),

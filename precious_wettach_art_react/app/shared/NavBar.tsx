@@ -69,6 +69,7 @@ const NavBar = () => {
           <h1 className="text-xl font-bold">Logo</h1>
           <ul className="flex gap-4 text-[1.1rem]">
             <li>Home</li>
+            <li><Link to='gallery'>Gallery</Link></li>
             <li>About</li>
             <li>Contact</li>
           </ul>
@@ -84,7 +85,7 @@ const NavBar = () => {
               ) : (
                 <>
                 <h2><Link to="/login">LOGIN</Link></h2>
-                <h2>REGISTER</h2>
+                <h2><Link to="register">REGISTER</Link></h2>
                 </>
               )}
             </div>

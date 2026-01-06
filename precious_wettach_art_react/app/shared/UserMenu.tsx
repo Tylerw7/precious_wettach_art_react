@@ -9,6 +9,12 @@ import {
 import type { User } from "../../Types/user"
 import { useLogoutMutation } from "../features/account/accountApi";
 import { useNavigate } from "react-router-dom";
+import { MdLogout } from "react-icons/md";
+import { BsPerson } from "react-icons/bs";
+import { FaMoneyCheck } from "react-icons/fa";
+import { IoIosSettings } from "react-icons/io";
+import { MdOutlineContactSupport } from "react-icons/md";
+
 
 
 type Props = {
@@ -44,17 +50,18 @@ export function UserMenu({user}: Props) {
         className="w-48"
       >
         
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>Billing</DropdownMenuItem>
-        <DropdownMenuItem>Settings</DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
+        <DropdownMenuItem className="hover:cursor-pointer"><BsPerson color="black"/>Profile</DropdownMenuItem>
+        <DropdownMenuItem className="hover:cursor-pointer"><FaMoneyCheck color="black"/>Billing</DropdownMenuItem>
+        <DropdownMenuItem className="hover:cursor-pointer"><IoIosSettings color="black"/>Settings</DropdownMenuItem>
+        <DropdownMenuItem className="hover:cursor-pointer"><MdOutlineContactSupport color="black"/>Support</DropdownMenuItem>
         <DropdownMenuItem 
-            className="text-red-600"
+            className="text-red-600 hover:cursor-pointer"
             onClick={(e) => {
                 logout(e);
                 redirect()
             }}
             >
+            <MdLogout color="black" />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
