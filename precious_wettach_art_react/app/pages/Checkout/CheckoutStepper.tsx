@@ -1,0 +1,83 @@
+import { Button } from '@/components/ui/button';
+import React, { useState } from 'react'
+import {Step, Stepper} from "react-form-stepper"
+
+
+
+const steps = ["Address", "Payment", "Review"]
+
+
+
+const CheckoutStepper = () => {
+    const [activeStep, setActiveStep] = useState(0);
+
+    const handleNext = () => {
+        setActiveStep(step => step + 1);
+    }
+
+    const handleBack = () => {
+        setActiveStep(step => step - 1);
+    }
+
+
+
+
+  return (
+    <div className='p-4 shadow-lg rounded-md'>
+       <Stepper
+            activeStep={activeStep}
+            styleConfig={{
+                activeBgColor: "#2563eb",
+                activeTextColor: "#ffffff",
+                completedBgColor: "#1e40af",
+                completedTextColor: "#ffffff",
+                inactiveBgColor: "#e5e7eb",
+                inactiveTextColor: "#374151",
+                size: "2em",
+                circleFontSize: "1rem",
+                labelFontSize: "0.875rem",
+                borderRadius: "50%",
+                fontWeight: 500,
+            }}
+            connectorStyleConfig={{
+                activeColor: "#2563eb",
+                completedColor: "#1e40af",
+                disabledColor: "#d1d5db",
+
+                // 👇 required by ConnectorStyleProps
+                size: 1,
+                style: "solid",
+            }}
+            >
+            {steps.map((label, index) => (
+                <Step key={index} label={label} />
+            ))}
+        </Stepper>
+
+
+        <div className='mt-2'>
+
+            <div className={activeStep === 0 ? "block" : "hidden"}>
+                <h2>Address Step</h2>
+            </div>
+
+            <div className={activeStep === 1 ? "block" : "hidden"}>
+                <h2>Payment Step</h2>
+            </div>
+
+            <div className={activeStep === 2 ? "block" : "hidden"}>
+                <h2>Review Step</h2>
+            </div>
+
+        </div>
+
+        <div className='flex p-2 justify-between'>
+            <Button onClick={handleBack}>Back</Button>
+            <Button onClick={handleNext}>Next</Button>
+        </div>
+
+    </div>
+  )
+}
+
+export default CheckoutStepper
