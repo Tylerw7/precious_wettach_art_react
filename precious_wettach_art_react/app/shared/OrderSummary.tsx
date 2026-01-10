@@ -3,7 +3,7 @@ import {currencyFormat} from '../../lib/util'
 import { Input } from '@/components/ui/input';
 import { useFetchBasketQuery } from '../pages/Basket/basketApi';
 import type { Item } from 'Types/basket';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 
 
@@ -11,6 +11,7 @@ const OrderSummary = () => {
     const {data: basket} = useFetchBasketQuery();
     const subtotal = basket?.items.reduce((sum: number, item: Item) => sum + item.quantity * item.price, 0) ?? 0;
     const deliveryFee = subtotal > 10000 ? 0 : 500;
+    const location = useLocation();
 
 
   return (
@@ -35,8 +36,10 @@ const OrderSummary = () => {
                 <p>{currencyFormat(deliveryFee)}</p>
             </div>
 
+            {!location.pathname.includes('checkout') && 
             <Link to="/checkout" className='w-full'><Button className='w-full mb-[15px] bg-blue-500 hover:cursor-pointer' 
                 >CECKOUT</Button></Link>
+            }
 
             <Link to="/gallery" className='w-full'><Button variant="ghost" className='w-full hover:cursor-pointer text-blue-500'>CONTINUE SHOPPING</Button></Link>
 

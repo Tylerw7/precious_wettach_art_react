@@ -5,16 +5,17 @@ import { Button } from "../../../src/components/ui/button";
 import {useForm} from 'react-hook-form'
 import {loginSchema, type LoginSchema} from '../../../lib/schemas/loginSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useLoginMutation } from "../../features/account/accountApi";
+import { useLazyUserInfoQuery, useLoginMutation } from "../../features/account/accountApi";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 
 
 
 
 const Login = () => {
-
+    const location = useLocation();
+    const [fetchUserInfo] = useLazyUserInfoQuery();
     const [login, {isLoading}] = useLoginMutation();
 
     const {register, handleSubmit, formState: {errors}} = useForm<LoginSchema>({
@@ -26,7 +27,8 @@ const Login = () => {
 
     const onSubmit = async (data: LoginSchema) => {
         await login(data);
-        navigate('/gallery')
+        await fetchUserInfo();
+        navigate(location.state.from || '/gallery')
     }
 
 
