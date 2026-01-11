@@ -1,13 +1,33 @@
 import React from 'react'
-import { useFetchBasketQuery } from '../Basket/basketApi'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import type { ConfirmationToken } from '@stripe/stripe-js';
+import { useBasket } from '../../../lib/hooks/useBasket';
+
+
+type Props = {
+    confirmationToken: ConfirmationToken | null
+}
 
 
 
+const Review = ({confirmationToken}: Props) => {
+    const {basket} = useBasket();
 
-const Review = () => {
-    const {data: basket} = useFetchBasketQuery();
 
+    const addressString = () => {
+        if (!confirmationToken?.shipping) return "";
+        const {name, address} = confirmationToken.shipping;
+        return `${name}, ${address?.line1}, ${address?.city}, 
+        ${address?.state}, ${address?.postal_code}, ${address?.country}`
+    }
+
+
+    const paymentString = () => {
+        if (!confirmationToken?.payment_method_preview.card) return '';
+        const {card} = confirmationToken.payment_method_preview;
+        return `${card.brand.toUpperCase()}, **** **** **** ${card.last4}, 
+        Exp: ${card.exp_month}/${card.exp_year}`
+    }
 
 
   return (
@@ -16,10 +36,10 @@ const Review = () => {
             <h4 className='font-bold text-[1.5rem] mb-[20px]'>Billing and delivery information</h4>
             <dl>
                 <h5 className='font-medium'>Shipping Address</h5>
-                <h5 className='text-muted-foreground mt-1 mb-[25px]'>address goes here</h5>
+                <h5 className='text-muted-foreground mt-1 mb-[25px]'>{addressString()}</h5>
 
                 <h5 className='font-medium'>Payment Detials</h5>
-                <h5 className='text-muted-foreground mt-1 mb-[25px]'>payment detials goes here</h5>
+                <h5 className='text-muted-foreground mt-1 mb-[25px]'>{paymentString()}</h5>
             </dl>
         </div>
 

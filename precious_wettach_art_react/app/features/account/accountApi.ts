@@ -71,14 +71,14 @@ export const accountApi = createApi({
                 method: "POST",
                 body: address
             }),
-            onQueryStarted: async (address, {dispatch, queryFulFilled}) => {
+            onQueryStarted: async (address, {dispatch, queryFulfilled}) => {
                 const patchResult = dispatch(
                     accountApi.util.updateQueryData('fetchAddress', undefined, (draft) => {
                         Object.assign(draft, {...address})
                     })
                 );
                 try {
-                    await queryFulFilled;
+                    await queryFulfilled;
                 } catch (error) {
                     patchResult.undo();
                     console.log(error)
