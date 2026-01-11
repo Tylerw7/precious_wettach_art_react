@@ -1,16 +1,13 @@
 import { Button } from '@/components/ui/button';
 import {currencyFormat} from '../../lib/util'
 import { Input } from '@/components/ui/input';
-import { useFetchBasketQuery } from '../pages/Basket/basketApi';
-import type { Item } from 'Types/basket';
+import {useBasket} from '../../lib/hooks/useBasket'
 import { Link, useLocation } from 'react-router-dom';
 
 
 
 const OrderSummary = () => {
-    const {data: basket} = useFetchBasketQuery();
-    const subtotal = basket?.items.reduce((sum: number, item: Item) => sum + item.quantity * item.price, 0) ?? 0;
-    const deliveryFee = subtotal > 10000 ? 0 : 500;
+    const {subtotal, deliveryFee} = useBasket();
     const location = useLocation();
 
 

@@ -1,10 +1,13 @@
 import { Button } from '@/components/ui/button';
-import { AddressElement, PaymentElement } from '@stripe/react-stripe-js';
+import { AddressElement, PaymentElement, useElements } from '@stripe/react-stripe-js';
 import React, { useState } from 'react'
 import {Step, Stepper} from "react-form-stepper"
 import Review from '../Checkout/Review'
-import { useFetchAddressQuery } from '../../features/account/accountApi';
+import { useFetchAddressQuery, useUpdateUserAddressMutation } from '../../features/account/accountApi';
 import type { Address } from 'Types/user';
+import type { StripeAddressElementChangeEvent, StripePaymentElementChangeEvent } from '@stripe/stripe-js';
+import { useBasket } from '../../../lib/hooks/useBasket';
+import { currencyFormat } from '../../../lib/util';
 
 
 
@@ -14,15 +17,51 @@ const steps = ["Address", "Payment", "Review"]
 
 const CheckoutStepper = () => {
     const [activeStep, setActiveStep] = useState(0);
-    const {data: {name, ...restAddress} = {} as Address} = useFetchAddressQuery();
+    const {data: {name, ...restAddress} = {} as Address, isLoading} = useFetchAddressQuery();
+    const [updateAddress] = useUpdateUserAddressMutation();
+    const [saveAddressChecked, setSaveAddressChecked] = useState(false);
+    const elements = useElements();
+    const [addressComplete, setAddressComplete] = useState(false);
+    const [paymentComplete, setPaymentComplete] = useState(false);
+    const {total} = useBasket();
 
-    const handleNext = () => {
+
+
+
+    const handleNext = async () => {
+        if (activeStep === 0 && saveAddressChecked && elements) {
+            const address = await getStripeAddress();
+            if (address) await updateAddress(address);
+        }
         setActiveStep(step => step + 1);
     }
 
     const handleBack = () => {
         setActiveStep(step => step - 1);
     }
+
+
+    const handleAddressChange = (event: StripeAddressElementChangeEvent) => {
+        setAddressComplete(event.complete)
+    }
+
+    const handlePaymentChange = (event: StripePaymentElementChangeEvent) => {
+        setPaymentComplete(event.complete)
+    }
+
+
+    const getStripeAddress = async () => {
+        const addressElement = elements?.getElement('address');
+        if (!addressElement) return null;
+
+        const {value: {name, address}} = await addressElement.getValue();
+
+        if (name && address) return {...address, name};
+
+        return null;
+    }
+
+    if (isLoading) return <div className='p-4'><h3>Loading checkout...</h3></div>
 
 
 
@@ -71,12 +110,21 @@ const CheckoutStepper = () => {
                             address: restAddress
                         }
                     }}
+                    onChange={handleAddressChange}
                 />
+                <div className='flex justify-end p-4 gap-2'>
+                    <input 
+                        type='checkbox' 
+                        checked={saveAddressChecked} 
+                        onChange={e => setSaveAddressChecked(e.target.checked)}
+                        />
+                    <p>Save as default address</p>
+                </div>
                 
             </div>
 
             <div className={activeStep === 1 ? "block" : "hidden"}>
-                <PaymentElement />
+                <PaymentElement  onChange={handlePaymentChange}/>
             </div>
 
             <div className={activeStep === 2 ? "block" : "hidden"}>
@@ -85,9 +133,18 @@ const CheckoutStepper = () => {
 
         </div>
 
+        
+        
+
         <div className='flex p-2 justify-between mt-5'>
             <Button onClick={handleBack}>Back</Button>
-            <Button onClick={handleNext}>Next</Button>
+            <Button 
+                onClick={handleNext}
+                disabled={
+                    (activeStep === 0 && !addressComplete) ||
+                    (activeStep === 1 && !paymentComplete)
+                }
+                >{activeStep === steps.length - 1 ? `Pay ${currencyFormat(total)}` : 'Next'}</Button>
         </div>
 
     </div>
