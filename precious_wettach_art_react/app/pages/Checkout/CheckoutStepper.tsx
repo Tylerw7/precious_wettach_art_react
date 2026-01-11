@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { AddressElement, PaymentElement } from '@stripe/react-stripe-js';
 import React, { useState } from 'react'
 import {Step, Stepper} from "react-form-stepper"
+import Review from '../Checkout/Review'
 
 
 
@@ -72,7 +73,7 @@ const CheckoutStepper = () => {
             </div>
 
             <div className={activeStep === 2 ? "block" : "hidden"}>
-                <h2>Review Step</h2>
+                <Review />
             </div>
 
         </div>
