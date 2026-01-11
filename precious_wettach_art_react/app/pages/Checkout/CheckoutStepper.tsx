@@ -9,6 +9,8 @@ import type { ConfirmationToken, StripeAddressElementChangeEvent, StripePaymentE
 import { useBasket } from '../../../lib/hooks/useBasket';
 import { currencyFormat } from '../../../lib/util';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
+import { Spinner } from '@/components/ui/spinner';
 
 
 
@@ -18,6 +20,7 @@ const steps = ["Address", "Payment", "Review"]
 
 const CheckoutStepper = () => {
     const [activeStep, setActiveStep] = useState(0);
+    const {basket} = useBasket();
     const {data: {name, ...restAddress} = {} as Address, isLoading} = useFetchAddressQuery();
     const [updateAddress] = useUpdateUserAddressMutation();
     const [saveAddressChecked, setSaveAddressChecked] = useState(false);
@@ -25,8 +28,10 @@ const CheckoutStepper = () => {
     const stripe = useStripe();
     const [addressComplete, setAddressComplete] = useState(false);
     const [paymentComplete, setPaymentComplete] = useState(false);
-    const {total} = useBasket();
+    const {total, clearBasket} = useBasket();
     const [confirmationToken, setConfirmationToken] = useState<ConfirmationToken | null>(null);
+    const [submitting, setSubmitting] = useState(false);
+    const navigate = useNavigate();
 
 
 
@@ -45,6 +50,9 @@ const CheckoutStepper = () => {
             if (stripeResult.error) return toast.error(stripeResult.error.message);
             setConfirmationToken(stripeResult.confirmationToken);
         }
+        if (activeStep === 2) {
+            await confirmPayment()
+        }
         setActiveStep(step => step + 1);
     }
 
@@ -60,6 +68,40 @@ const CheckoutStepper = () => {
     const handlePaymentChange = (event: StripePaymentElementChangeEvent) => {
         setPaymentComplete(event.complete)
     }
+
+
+    const confirmPayment = async () => {
+        setSubmitting(true);
+        try {
+            if (!confirmationToken || !basket?.clientSecret) 
+                throw new Error('Unable to process payment');
+            const paymentResult = await stripe?.confirmPayment({
+                clientSecret: basket.clientSecret,
+                redirect: 'if_required',
+                confirmParams: {
+                    confirmation_token: confirmationToken.id
+                }
+            });
+
+            if (paymentResult?.paymentIntent?.status === 'succeeded') {
+                navigate('/checkout/success');
+                clearBasket();
+            } else if (paymentResult?.error) {
+                throw new Error(paymentResult.error.message);
+            } else {
+                throw new Error('Something went wrong');
+            }
+        } catch (error) {
+            if (error instanceof Error){
+                toast.error(error.message)
+            }
+            setActiveStep(step => step - 1);
+        } finally {
+            setSubmitting(false);
+        }
+    }
+
+
 
 
     const getStripeAddress = async () => {
@@ -154,9 +196,10 @@ const CheckoutStepper = () => {
                 onClick={handleNext}
                 disabled={
                     (activeStep === 0 && !addressComplete) ||
-                    (activeStep === 1 && !paymentComplete)
+                    (activeStep === 1 && !paymentComplete) ||
+                    submitting
                 }
-                >{activeStep === steps.length - 1 ? `Pay ${currencyFormat(total)}` : 'Next'}</Button>
+                >{submitting && <Spinner />}{activeStep === steps.length - 1 ? `Pay ${currencyFormat(total)}` : 'Next'}</Button>
         </div>
 
     </div>

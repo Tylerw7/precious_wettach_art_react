@@ -10,6 +10,7 @@ import CheckoutPage from '../app/pages/Checkout/CheckoutPage'
 import Login from "../app/pages/authentication/Login"
 import Register from "../app/pages/authentication/Register"
 import RequireAuth from '../app/features/RequireAuth'
+import CheckoutSuccess from '../app/pages/Checkout/CheckoutSuccess'
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         {/* Protected Routes */}
         <Route element={<RequireAuth />}>
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/checkout/success" element={<CheckoutSuccess />} />
         </Route>
 
 
