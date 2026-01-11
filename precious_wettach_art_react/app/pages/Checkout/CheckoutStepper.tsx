@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { AddressElement, PaymentElement } from '@stripe/react-stripe-js';
 import React, { useState } from 'react'
 import {Step, Stepper} from "react-form-stepper"
 
@@ -58,11 +59,16 @@ const CheckoutStepper = () => {
         <div className='mt-2'>
 
             <div className={activeStep === 0 ? "block" : "hidden"}>
-                <h2>Address Step</h2>
+                <AddressElement 
+                    options={{
+                        mode: 'shipping'
+                    }}
+                />
+                
             </div>
 
             <div className={activeStep === 1 ? "block" : "hidden"}>
-                <h2>Payment Step</h2>
+                <PaymentElement />
             </div>
 
             <div className={activeStep === 2 ? "block" : "hidden"}>
@@ -71,7 +77,7 @@ const CheckoutStepper = () => {
 
         </div>
 
-        <div className='flex p-2 justify-between'>
+        <div className='flex p-2 justify-between mt-5'>
             <Button onClick={handleBack}>Back</Button>
             <Button onClick={handleNext}>Next</Button>
         </div>
