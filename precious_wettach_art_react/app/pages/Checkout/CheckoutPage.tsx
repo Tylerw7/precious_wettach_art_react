@@ -17,7 +17,15 @@ const CheckoutPage = () => {
   const created = useRef(false);
 
 
+  // new
+  // useEffect(() => {
+  //   if (!basket?.clientSecret && !created.current) {
+  //     createPaymentIntent();
+  //     created.current = true;
+  //   }
+  // }, [basket?.clientSecret, createPaymentIntent]);
 
+  
   useEffect(() => {
     if (!created.current) createPaymentIntent();
     created.current = true;

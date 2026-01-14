@@ -28,8 +28,8 @@ const Login = () => {
     const onSubmit = async (data: LoginSchema) => {
         await login(data);
         await fetchUserInfo();
-        navigate(location.state.from || '/gallery')
-    }
+        navigate(location.state?.from || '/gallery');
+    } 
 
 
 

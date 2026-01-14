@@ -85,10 +85,11 @@ export const basketApi = createApi({
         }),
         clearBasket: builder.mutation<void, void>({
             queryFn: () => ({data: undefined}),
-            onQueryStarted: async (_NEVER, {dispatch}) => {
+            onQueryStarted: async (_, {dispatch}) => {
                 dispatch(
                     basketApi.util.updateQueryData('fetchBasket', undefined, (draft) => {
-                        draft.items = []
+                        draft.items = [];
+                        draft.basketId = '';
                     })
                 );
                 Cookies.remove('basketId');

@@ -4,13 +4,14 @@ import React, { useState } from 'react'
 import {Step, Stepper} from "react-form-stepper"
 import Review from '../Checkout/Review'
 import { useFetchAddressQuery, useUpdateUserAddressMutation } from '../../features/account/accountApi';
-import type { Address } from 'Types/user';
+//import type { Address } from 'Types/user';
 import type { ConfirmationToken, StripeAddressElementChangeEvent, StripePaymentElementChangeEvent } from '@stripe/stripe-js';
 import { useBasket } from '../../../lib/hooks/useBasket';
 import { currencyFormat } from '../../../lib/util';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { Spinner } from '@/components/ui/spinner';
+import { useCreateOrderMutation } from '../../features/orders/orderApi';
 
 
 
@@ -20,8 +21,13 @@ const steps = ["Address", "Payment", "Review"]
 
 const CheckoutStepper = () => {
     const [activeStep, setActiveStep] = useState(0);
+    const [createOrder] = useCreateOrderMutation();
     const {basket} = useBasket();
-    const {data: {name, ...restAddress} = {} as Address, isLoading} = useFetchAddressQuery();
+    const {data, isLoading} = useFetchAddressQuery();
+    let name, restAddress;
+    if (data) {
+        ({name, ...restAddress} = data);
+    }
     const [updateAddress] = useUpdateUserAddressMutation();
     const [saveAddressChecked, setSaveAddressChecked] = useState(false);
     const elements = useElements();
@@ -53,7 +59,7 @@ const CheckoutStepper = () => {
         if (activeStep === 2) {
             await confirmPayment()
         }
-        setActiveStep(step => step + 1);
+        if (activeStep < 2 ) setActiveStep(step => step + 1);
     }
 
     const handleBack = () => {
@@ -75,6 +81,10 @@ const CheckoutStepper = () => {
         try {
             if (!confirmationToken || !basket?.clientSecret) 
                 throw new Error('Unable to process payment');
+
+            const orderModel = await createOrderModel();
+            const orderResult = await createOrder(orderModel);
+
             const paymentResult = await stripe?.confirmPayment({
                 clientSecret: basket.clientSecret,
                 redirect: 'if_required',
@@ -84,7 +94,7 @@ const CheckoutStepper = () => {
             });
 
             if (paymentResult?.paymentIntent?.status === 'succeeded') {
-                navigate('/checkout/success');
+                navigate('/checkout/success', {state: orderResult});
                 clearBasket();
             } else if (paymentResult?.error) {
                 throw new Error(paymentResult.error.message);
@@ -99,6 +109,17 @@ const CheckoutStepper = () => {
         } finally {
             setSubmitting(false);
         }
+    }
+
+
+
+    const createOrderModel = async () => {
+        const shippingAddress = await getStripeAddress();
+        const paymentSummary = confirmationToken?.payment_method_preview.card;
+
+        if (!shippingAddress || !paymentSummary) throw new Error('Problem creating order');
+
+        return {shippingAddress, paymentSummary};
     }
 
 
