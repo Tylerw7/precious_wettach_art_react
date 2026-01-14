@@ -11,6 +11,10 @@ import Login from "../app/pages/authentication/Login"
 import Register from "../app/pages/authentication/Register"
 import RequireAuth from '../app/features/RequireAuth'
 import CheckoutSuccess from '../app/pages/Checkout/CheckoutSuccess'
+import OrdersPage from "../app/pages/OrdersPage"
+import OrderDetails from "../app/pages/OrderDetails"
+
+
 
 
 function App() {
@@ -31,6 +35,8 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/checkout/success" element={<CheckoutSuccess />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/orders/:id" element={<OrderDetails />} />
         </Route>
 
 

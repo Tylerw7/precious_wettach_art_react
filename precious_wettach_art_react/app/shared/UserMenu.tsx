@@ -8,7 +8,7 @@ import {
 } from "../../src/components/ui/dropdown-menu"
 import type { User } from "../../Types/user"
 import { useLogoutMutation } from "../features/account/accountApi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
 import { BsPerson } from "react-icons/bs";
 import { FaMoneyCheck } from "react-icons/fa";
@@ -51,6 +51,7 @@ export function UserMenu({user}: Props) {
       >
         
         <DropdownMenuItem className="hover:cursor-pointer"><BsPerson color="black"/>Profile</DropdownMenuItem>
+        <DropdownMenuItem className="hover:cursor-pointer"><Link to="/orders" className="flex gap-2"><BsPerson color="black"/>Orders</Link></DropdownMenuItem>
         <DropdownMenuItem className="hover:cursor-pointer"><FaMoneyCheck color="black"/>Billing</DropdownMenuItem>
         <DropdownMenuItem className="hover:cursor-pointer"><IoIosSettings color="black"/>Settings</DropdownMenuItem>
         <DropdownMenuItem className="hover:cursor-pointer"><MdOutlineContactSupport color="black"/>Support</DropdownMenuItem>

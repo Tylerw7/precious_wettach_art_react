@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { currencyFormat } from '../../../lib/util';
+import { currencyFormat, formatAddressString, formatPaymentString } from '../../../lib/util';
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import type { Order } from 'Types/order';
@@ -15,19 +15,7 @@ const CheckoutSuccess = () => {
 
 
 
-    const addressString = () => {
-        const address = order.shippingAddress;
-
-        return `${address?.name}, ${address?.line1}, ${address?.city}, 
-        ${address?.state}, ${address?.postal_code}, ${address?.country}`
-    }
-
-    const paymentString = () => {
-        const  card = order.paymentSummary;
-
-        return `${card?.brand?.toUpperCase()}, **** **** **** ${card?.last4}, 
-        Exp: ${card?.exp_month}/${card?.exp_year}`
-    }
+    //
 
 
   return (
@@ -45,12 +33,12 @@ const CheckoutSuccess = () => {
 
                 <div className='flex justify-between'>
                     <h3>Payment Method</h3>
-                    <h4>{paymentString()}</h4>
+                    <h4>{formatPaymentString(order.paymentSummary)}</h4>
                 </div>
 
                 <div className='flex justify-between'>
                     <h3>Shipping Address</h3>
-                    <h4>{addressString()}</h4>
+                    <h4>{formatAddressString(order.shippingAddress)}</h4>
                 </div>
 
                 <div className='flex justify-between'>
